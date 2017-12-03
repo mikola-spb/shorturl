@@ -10,8 +10,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.net.URISyntaxException;
-
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -25,7 +23,7 @@ public class ShortUrlControllerTest {
     private ShortUrlController controller;
 
     @Test
-    public void resolveUrl_existingId() throws URISyntaxException {
+    public void resolveUrl_existingId() {
         when(shortUrlService.get("payu"))
                 .thenReturn("https://corporate.payu.com/");
 
@@ -38,7 +36,7 @@ public class ShortUrlControllerTest {
     }
 
     @Test
-    public void resolveUrl_notExistingId() throws URISyntaxException {
+    public void resolveUrl_notExistingId() {
         when(shortUrlService.get("404"))
                 .thenReturn(null);
 

@@ -36,15 +36,12 @@ public class ShortUrlControllerTest {
                 .containsEntry(HttpHeaders.LOCATION, singletonList("https://corporate.payu.com/"));
     }
 
-    @Test
+    @Test(expected = TargetUrlNotFound.class)
     public void resolveUrl_notExistingId() {
         when(shortUrlService.get("http://localhost/404"))
                 .thenReturn(null);
 
-        ResponseEntity response = controller.resolveUrl(mockRequest("/404"));
-
-        assertThat(response.getStatusCode())
-                .isEqualTo(HttpStatus.NOT_FOUND);
+        controller.resolveUrl(mockRequest("/404"));
     }
 
     @Test

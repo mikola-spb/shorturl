@@ -59,6 +59,11 @@ public class ShortUrlControllerTest {
                 .hasFieldOrPropertyWithValue("targetUrl", "https://corporate.payu.com/");
     }
 
+    @Test(expected = RuntimeException.class)
+    public void itDoesNotSaveInvalidUrl() {
+        controller.save("bla");
+    }
+
     private static MockHttpServletRequest mockRequest(String uri) {
         return new MockHttpServletRequest("GET", uri);
     }

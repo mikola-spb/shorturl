@@ -43,13 +43,13 @@ public class ShortUrlController {
 
     }
 
-    private void assertTargetUrl(String url) {
+    private void assertTargetUrl(String rawUrl) {
         try {
-            new URL(url);
+            new URL(rawUrl).toURI();
             // everything is fine at this point
 
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("The following URL is malformed: " + url, e);
+        } catch (MalformedURLException | URISyntaxException e) {
+            throw new RuntimeException("The following URL is invalid: " + rawUrl, e);
         }
     }
 

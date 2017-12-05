@@ -60,6 +60,11 @@ public class ShortUrlControllerTest {
     }
 
     @Test(expected = RuntimeException.class)
+    public void itDoesNotSaveNotEncodedUrls() {
+        controller.save("https://corporate.payu.com/some path");
+    }
+
+    @Test(expected = RuntimeException.class)
     public void itDoesNotSaveInvalidUrl() {
         controller.save("bla");
     }

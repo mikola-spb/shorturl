@@ -9,6 +9,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,10 +25,10 @@ public class ShortUrlControllerTest {
 
     @Test
     public void resolveUrl_existingId() {
-        when(shortUrlService.get("payu"))
+        when(shortUrlService.get("http://localhost:8080/payu"))
                 .thenReturn("https://corporate.payu.com/");
 
-        ResponseEntity response = controller.resolveUrl("payu");
+        ResponseEntity response = controller.resolveUrl(mockRequest("http://localhost:8080/payu"));
 
         assertThat(response.getStatusCode().is3xxRedirection())
                 .isTrue();
@@ -40,7 +41,7 @@ public class ShortUrlControllerTest {
         when(shortUrlService.get("404"))
                 .thenReturn(null);
 
-        ResponseEntity response = controller.resolveUrl("payu");
+        ResponseEntity response = controller.resolveUrl(mockRequest("http://localhost:8080/404"));
 
         assertThat(response.getStatusCode())
                 .isEqualTo(HttpStatus.NOT_FOUND);
@@ -56,6 +57,10 @@ public class ShortUrlControllerTest {
         assertThat(response)
                 .hasFieldOrPropertyWithValue("shortUrl", "http://localhost:8080/payu")
                 .hasFieldOrPropertyWithValue("targetUrl", "https://corporate.payu.com/");
+    }
+
+    private static MockHttpServletRequest mockRequest(String url) {
+        return new MockHttpServletRequest("GET", url);
     }
 
 }

@@ -9,10 +9,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ShortUrlService {
     private final Map<String, String> storage = new ConcurrentHashMap<>();
 
-    public String put(String url) {
-        String id = generateId(url);
-        storage.put(id, url);
-        return id;
+    private String baseShortUrl = "http://localhost:8080/";
+
+    public String put(String targetUrl) {
+        String shortUrl = baseShortUrl + generateId(targetUrl);
+        storage.put(shortUrl, targetUrl);
+        return shortUrl;
     }
 
     private String generateId(String url) {

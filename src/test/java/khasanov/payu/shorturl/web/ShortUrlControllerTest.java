@@ -46,4 +46,16 @@ public class ShortUrlControllerTest {
                 .isEqualTo(HttpStatus.NOT_FOUND);
     }
 
+    @Test
+    public void saveUrl() {
+        when(shortUrlService.put("https://corporate.payu.com/"))
+                .thenReturn("http://localhost:8080/payu");
+
+        ShortUrlResponse response = controller.save("https://corporate.payu.com/");
+
+        assertThat(response)
+                .hasFieldOrPropertyWithValue("shortUrl", "http://localhost:8080/payu")
+                .hasFieldOrPropertyWithValue("targetUrl", "https://corporate.payu.com/");
+    }
+
 }

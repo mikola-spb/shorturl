@@ -1,6 +1,6 @@
 package khasanov.payu.shorturl.service;
 
-import khasanov.payu.shorturl.util.UrlEncoder;
+import khasanov.payu.shorturl.util.UrlShorten;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +26,7 @@ public class ShortUrlService {
     }
 
     private String generateId(String url) {
-        return UrlEncoder.encode(url);
+        return UrlShorten.encode(url);
     }
 
     public String get(String id) {

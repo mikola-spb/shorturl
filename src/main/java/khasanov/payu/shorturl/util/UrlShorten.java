@@ -2,7 +2,7 @@ package khasanov.payu.shorturl.util;
 
 import java.util.zip.CRC32;
 
-public class UrlEncoder {
+public class UrlShorten {
     private static final char[] ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_".toCharArray();
 
     public static String encode(String url) {

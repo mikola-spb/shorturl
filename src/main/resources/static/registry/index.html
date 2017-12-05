@@ -8,58 +8,10 @@
 
     <link rel="stylesheet" href="//www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat">
+    <link rel="stylesheet" href="/css/main.css">
 
     <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
-
-    <style>
-        body,h1,h2,h3,h4,h5,h6 {
-            font-family: "Montserrat", sans-serif
-        }
-        #header {
-            padding: 150px;
-        }
-        #main-container {
-            position: relative;
-            top: -110px;
-        }
-    </style>
-
-    <script>
-        var onFormSubmit = function(targetUrl) {
-            $.ajax({
-                url: "/registry",
-                type: "POST",
-                dataType: "json",
-                data: {
-                    "targetUrl": targetUrl
-                }
-
-            }).done(function (data, textStatus, jqXHR) {
-                console.debug(data);
-                showShortUrl(data.shortUrl);
-
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                console.error(errorThrown);
-                showError("Could not create short URL for " + targetUrl);
-
-            });
-        };
-
-        var showShortUrl = function(shortUrl) {
-            $("#result").html("Here is your short URL: <a href='" + shortUrl + "' target='_blank'>" + shortUrl + "</a>");
-        };
-
-        var showError = function(message) {
-            $("#result").html("<p class='w3-text-red'>" + message + "</p>");
-        };
-
-        $(function() {
-            $("#shorten-form").submit(function(event) {
-                onFormSubmit($("#input-target-url").val());
-                event.preventDefault();
-            });
-        });
-    </script>
+    <script src="/js/main.js"></script>
 </head>
 
 <body>

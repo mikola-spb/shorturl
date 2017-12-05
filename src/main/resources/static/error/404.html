@@ -1,0 +1,88 @@
+<!doctype html>
+
+<head>
+    <title>Shorten your url</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="//www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat">
+
+    <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <style>
+        body,h1,h2,h3,h4,h5,h6 {
+            font-family: "Montserrat", sans-serif
+        }
+        #header {
+            padding: 150px;
+        }
+        #main-container {
+            position: relative;
+            top: -110px;
+        }
+    </style>
+
+    <script>
+        var onFormSubmit = function(targetUrl) {
+            $.ajax({
+                url: "/registry",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "targetUrl": targetUrl
+                }
+
+            }).done(function (data, textStatus, jqXHR) {
+                console.debug(data);
+                showShortUrl(data.shortUrl);
+
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                console.error(errorThrown);
+                showError("Could not create short URL for " + targetUrl);
+
+            });
+        };
+
+        var showShortUrl = function(shortUrl) {
+            $("#result").html("Here is your short URL: <a href='" + shortUrl + "' target='_blank'>" + shortUrl + "</a>");
+        };
+
+        var showError = function(message) {
+            $("#result").html("<p class='w3-text-red'>" + message + "</p>");
+        };
+
+        $(function() {
+            $("#shorten-form").submit(function(event) {
+                onFormSubmit($("#input-target-url").val());
+                event.preventDefault();
+            });
+        });
+    </script>
+</head>
+
+<body>
+
+<header id="header" class="w3-container w3-center w3-yellow">
+    <h1 class="w3-margin w3-jumbo">Oops, we could not find anything</h1>
+    <p>Try the form below to create a short link for your URL</p>
+</header>
+
+<section id="main-container" class="w3-content w3-padding-large w3-margin-top">
+    <div class="w3-card-4 w3-white">
+        <form id="shorten-form" class="w3-container" method="post" target="/registry">
+            <p>
+                <label for="input-target-url">Your long url</label>
+                <input class="w3-input" id="input-target-url" name="targetUrl" title="The URL you want to shorten" />
+            </p>
+
+            <p>
+                <input type="submit" class="w3-btn w3-red" value="Shorten"/>
+            </p>
+        </form>
+
+        <div id="result" class="w3-container w3-padding-16"></div>
+    </div>
+</section>
+</body>

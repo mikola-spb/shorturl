@@ -5,10 +5,11 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UrlShortenTest {
+    private UrlShorten urlShorten = new UrlShorten();
 
     @Test
     public void itGeneratesHashWithAllowedSymbols() {
-        assertThat(UrlShorten.encode("https://corporate.payu.com/"))
+        assertThat(urlShorten.encode("https://corporate.payu.com/"))
                 .containsPattern("[0-9a-zA-Z_-]{1,6}");
     }
 

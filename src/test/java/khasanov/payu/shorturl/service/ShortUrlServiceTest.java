@@ -5,12 +5,12 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ShortUrlServiceTest {
-    private ShortUrlService service = new ShortUrlService();
+    private ShortUrlService service = new ShortUrlService("http://sh.rt/");
 
     @Test
     public void shortUrlIsGeneratedForValidTargetUrl() {
         assertThat(service.put("https://corporate.payu.com/"))
-                .containsPattern("http://localhost:8080/[0-9a-zA-Z]{3,8}");
+                .containsPattern("http://sh.rt/[0-9a-zA-Z_-]{1,6}");
     }
 
     @Test

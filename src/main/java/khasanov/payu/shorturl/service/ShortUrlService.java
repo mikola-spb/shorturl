@@ -1,5 +1,6 @@
 package khasanov.payu.shorturl.service;
 
+import khasanov.payu.shorturl.util.UrlEncoder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -10,8 +11,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ShortUrlService {
     private final Map<String, String> storage = new ConcurrentHashMap<>();
 
-    @Value("${baseShortUrl:http://localhost:8080/}")
-    private String baseShortUrl;
+    private final String baseShortUrl;
+
+    public ShortUrlService(
+            @Value("${baseShortUrl:http://localhost:8080/}") String baseShortUrl
+    ) {
+        this.baseShortUrl = baseShortUrl;
+    }
 
     public String put(String targetUrl) {
         String shortUrl = baseShortUrl + generateId(targetUrl);
@@ -20,7 +26,7 @@ public class ShortUrlService {
     }
 
     private String generateId(String url) {
-        return "" + url.hashCode();
+        return UrlEncoder.encode(url);
     }
 
     public String get(String id) {

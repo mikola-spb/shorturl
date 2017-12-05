@@ -25,23 +25,23 @@ public class ShortUrlControllerTest {
 
     @Test
     public void resolveUrl_existingId() {
-        when(shortUrlService.get("http://localhost:8080/payu"))
+        when(shortUrlService.get("http://localhost/payu"))
                 .thenReturn("https://corporate.payu.com/");
 
-        ResponseEntity response = controller.resolveUrl(mockRequest("http://localhost:8080/payu"));
+        ResponseEntity response = controller.resolveUrl(mockRequest("/payu"));
 
-        assertThat(response.getStatusCode().is3xxRedirection())
-                .isTrue();
+        assertThat(response.getStatusCode())
+                .isEqualTo(HttpStatus.SEE_OTHER);
         assertThat(response.getHeaders())
                 .containsEntry(HttpHeaders.LOCATION, singletonList("https://corporate.payu.com/"));
     }
 
     @Test
     public void resolveUrl_notExistingId() {
-        when(shortUrlService.get("404"))
+        when(shortUrlService.get("http://localhost/404"))
                 .thenReturn(null);
 
-        ResponseEntity response = controller.resolveUrl(mockRequest("http://localhost:8080/404"));
+        ResponseEntity response = controller.resolveUrl(mockRequest("/404"));
 
         assertThat(response.getStatusCode())
                 .isEqualTo(HttpStatus.NOT_FOUND);
@@ -59,8 +59,8 @@ public class ShortUrlControllerTest {
                 .hasFieldOrPropertyWithValue("targetUrl", "https://corporate.payu.com/");
     }
 
-    private static MockHttpServletRequest mockRequest(String url) {
-        return new MockHttpServletRequest("GET", url);
+    private static MockHttpServletRequest mockRequest(String uri) {
+        return new MockHttpServletRequest("GET", uri);
     }
 
 }

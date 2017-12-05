@@ -7,3 +7,6 @@
 # Gradle
 .gradle
 build
+
+# Local dev configuration
+/application.properties

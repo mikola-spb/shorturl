@@ -59,14 +59,21 @@ public class ShortUrlControllerTest {
                 .hasFieldOrPropertyWithValue("targetUrl", "https://corporate.payu.com/");
     }
 
-    @Test(expected = RuntimeException.class)
-    public void itDoesNotSaveNotEncodedUrls() {
-        controller.save("https://corporate.payu.com/some path");
+    @Test
+    public void saveUrlWithoutProtocol() {
+        when(shortUrlService.put("http://corporate.payu.com"))
+                .thenReturn("http://localhost:8080/payu");
+
+        ShortUrlResponse response = controller.save("corporate.payu.com");
+
+        assertThat(response)
+                .hasFieldOrPropertyWithValue("shortUrl", "http://localhost:8080/payu")
+                .hasFieldOrPropertyWithValue("targetUrl", "http://corporate.payu.com");
     }
 
     @Test(expected = RuntimeException.class)
-    public void itDoesNotSaveInvalidUrl() {
-        controller.save("bla");
+    public void itDoesNotSaveNotEncodedUrls() {
+        controller.save("https://corporate.payu.com/some path");
     }
 
     private static MockHttpServletRequest mockRequest(String uri) {

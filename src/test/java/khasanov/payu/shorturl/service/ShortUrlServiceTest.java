@@ -5,10 +5,9 @@ import khasanov.payu.shorturl.repository.ShortUrlRepository;
 import khasanov.payu.shorturl.util.UrlShorten;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.dao.EmptyResultDataAccessException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -41,7 +40,7 @@ public class ShortUrlServiceTest {
 
     @Test
     public void registeredTargetUrlIsResolvable() {
-        when(repository.getOneByShortUrl("http://sh.rt/payu"))
+        when(repository.findOne("http://sh.rt/payu"))
                 .thenReturn(PAYU_ENTRY);
 
         assertThat(service.get("http://sh.rt/payu"))
@@ -50,8 +49,8 @@ public class ShortUrlServiceTest {
 
     @Test
     public void unregisteredTargetUrlIsNotResolvable() {
-        when(repository.getOneByShortUrl(any()))
-                .thenThrow(new EmptyResultDataAccessException(1));
+        when(repository.findOne(anyString()))
+                .thenReturn(null);
 
         assertThat(service.get("http://sh.rt/payu"))
                 .isNull();

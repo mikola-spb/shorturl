@@ -5,7 +5,6 @@ import khasanov.payu.shorturl.repository.ShortUrlRepository;
 import khasanov.payu.shorturl.util.UrlShorten;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,10 +34,7 @@ public class ShortUrlService {
     }
 
     public String get(String shortUrl) {
-        try {
-            return repository.getOneByShortUrl(shortUrl).getTargetUrl();
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        ShortUrlEntry entry = repository.findOne(shortUrl);
+        return entry != null ? entry.getTargetUrl() : null;
     }
 }

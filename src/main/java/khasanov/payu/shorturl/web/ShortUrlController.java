@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 @Controller
 public class ShortUrlController {
@@ -34,18 +33,22 @@ public class ShortUrlController {
     @RequestMapping(value = "/registry", method = RequestMethod.POST)
     @ResponseBody
     public ShortUrlResponse save(@RequestParam("targetUrl") String targetUrl) {
-        assertTargetUrl(targetUrl);
+        String normalizedTargetUrl = assertAndNormalizeTargetUrl(targetUrl);
 
         return new ShortUrlResponse(
-                shortUrlService.put(targetUrl),
-                targetUrl
+                shortUrlService.put(normalizedTargetUrl),
+                normalizedTargetUrl
         );
 
     }
 
-    private void assertTargetUrl(String rawUrl) {
+    private String assertAndNormalizeTargetUrl(String rawUrl) {
         try {
-            new URL(rawUrl).toURI();
+            URI uri = new URI(rawUrl);
+            if (uri.getScheme() == null) {
+                uri = new URI("http://" + rawUrl);
+            }
+            return uri.toURL().toExternalForm();
             // everything is fine at this point
 
         } catch (MalformedURLException | URISyntaxException e) {
